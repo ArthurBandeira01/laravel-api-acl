@@ -12,7 +12,6 @@ class UserRepository
 {
     public function __construct(protected User $user)
     {
-
     }
 
     public function getPaginate(int $totalPerPage = 15, int $page = 1, string $filter = ''): LengthAwarePaginator
@@ -34,6 +33,11 @@ class UserRepository
     public function findById(string $id): ?User
     {
         return $this->user->find($id);
+    }
+
+    public function findByEmail(string $email): ?User
+    {
+        return $this->user->where('email', $email)->first();
     }
 
     public function update(EditUserDTO $dto): bool

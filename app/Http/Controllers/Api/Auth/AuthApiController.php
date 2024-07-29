@@ -22,7 +22,6 @@ class AuthApiController extends Controller
     public function auth(AuthApiRequest $request)
     {
         $user = $this->userRepository->findByEmail($request->email);
-
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
@@ -39,7 +38,7 @@ class AuthApiController extends Controller
     public function me()
     {
         $user = Auth::user();
-
+        $user->load('permissions');
         return new UserResource($user);
     }
 

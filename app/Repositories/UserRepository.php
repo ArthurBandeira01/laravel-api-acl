@@ -20,7 +20,9 @@ class UserRepository
             if ($filter !== '') {
                 $query->where('name', 'like', '%{$filter}%');
             }
-        })->paginate($totalPerPage, ['*'], 'page', $page);
+        })
+        ->with(['permissions'])
+        ->paginate($totalPerPage, ['*'], 'page', $page);
     }
 
     public function createNew(CreateUserDTO $dto): User
@@ -63,5 +65,29 @@ class UserRepository
         }
 
         return $user->delete();
+    }
+
+    public function syncPermissions(string $id, array $permissions): ?bool
+    {
+        if (!$user = $this->findById($id)) {
+            return null;
+        }
+
+        $user->permissions()->sync($permissions);
+
+        return true;
+    }
+
+    public function getPermissionsByUserId(string $user)
+    {
+        return $this->findById($user)->permissions()->get();
+    }
+
+    public function hasPermission(User $user, string $permissionName): bool
+    {
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+        return $user->permissions()->where('name', $permissionName)->exists();
     }
 }

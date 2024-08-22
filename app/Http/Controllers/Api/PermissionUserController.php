@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SyncPermissionsOfUser;
 use App\Http\Resources\PermissionResource;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class PermissionUserController extends Controller
     {
     }
 
-    public function syncPermissionsOfUser(string $id, Request $request)
+    public function syncPermissionsOfUser(string $id, SyncPermissionsOfUser $request)
     {
         $response = $this->userRepository->syncPermissions($id, $request->permissions);
 

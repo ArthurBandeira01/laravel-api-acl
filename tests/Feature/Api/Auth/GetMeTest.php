@@ -18,14 +18,7 @@ test('should return user with our data', function () {
     getJson(route('auth.me'), [
         'Authorization' => "Bearer {$token}"
     ])
-    ->assertJsonStructure([
-        'data' => [
-            'id',
-            'name',
-            'email',
-            'permissions' => []
-        ]
-    ])
+    ->assertJsonStructure(['data' => ['id', 'name', 'email', 'permissions' => []]])
     ->assertOk();
 });
 

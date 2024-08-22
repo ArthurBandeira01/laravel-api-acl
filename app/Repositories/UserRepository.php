@@ -18,7 +18,7 @@ class UserRepository
     {
         return $this->user->where(function ($query) use ($filter) {
             if ($filter !== '') {
-                $query->where('name', 'like', '%{$filter}%');
+                $query->where('name', 'LIKE', "%{$filter}%");
             }
         })
         ->with(['permissions'])
@@ -32,9 +32,9 @@ class UserRepository
         return $this->user->create($data);
     }
 
-    public function findById(string $id): ?User
+    public function findById(string $id, array $relations = []): ?User
     {
-        return $this->user->find($id);
+        return $this->user->with($relations)->find($id);
     }
 
     public function findByEmail(string $email): ?User
